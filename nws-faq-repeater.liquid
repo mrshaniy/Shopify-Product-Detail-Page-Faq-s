@@ -1,0 +1,88 @@
+{% style %}
+  :root {
+    --custom-svg: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='%230c63e4'%3e%3cpath fill-rule='evenodd' d='M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z'/%3e%3c/svg%3e");
+  }
+  .nws-ac-title {
+      font-size: 18px;
+      color: #444444;
+      line-height: normal;
+      margin-top: 0;
+      margin-bottom: 0;
+      display: block;
+      cursor: pointer;
+      display: flex;
+      justify-content: space-between;
+  }
+  .nws-ac-body {
+      font-size: 16px;
+      line-height: 1.2;
+      color: #444444;
+      padding-top: 18px;
+      margin-top: 0;
+      margin-bottom: 0;
+      display: none;
+  }
+  .nws-ac-item {
+      padding: 18px 14px;
+      border: 1px solid #444444;
+      border-radius: 6px;
+  }
+  .nws-ac-item:not(:first-child) {
+      margin-top: 10px;
+  }
+  .nws-ac-item.nws-active-ac-item {
+      border: 2px solid #444444;
+  }
+  .nws-ac-title:after {
+      content: "";
+      background: var(--custom-svg);
+      width: 20px;
+      height: 20px;
+      display: block;
+      background-size: 20px;
+      transform: rotate(-90deg);
+      filter: brightness(0);
+      transition: transform 0.3s ease-in-out;
+  }
+  .nws-ac-item.nws-active-ac-item .nws-ac-title:after {
+      content: "";
+      background: var(--custom-svg);
+      width: 20px;
+      height: 20px;
+      display: block;
+      background-size: 20px;
+      transform: rotate(0deg);
+      filter: brightness(0);
+  }
+  .acc-block {
+    margin-top: 14px;
+  }
+{% endstyle %}
+<div class="acc-block">
+  {% for block in product.metafields.custom.faq_s.value %}
+    <div class="nws-ac-item">
+      <h3 class="nws-ac-title">{{ block.question }}</h3>
+      <div class="nws-ac-body">
+        {{ block.faq_answer }}
+      </div>
+    </div>
+  {% endfor %}
+</div>
+<script>
+   $(document).ready(function() {
+        // Add click event to elements with class "nws-ac-title"
+        $('.nws-ac-title').on('click', function() {
+            // Toggle the new class on the parent element with class "nws-ac-item"
+            $(this).parent('.nws-ac-item').toggleClass('nws-active-ac-item');
+
+            // Toggle the visibility of the associated content
+            $(this).next('.nws-ac-body').slideToggle();
+
+            // Hide content and remove class from other items
+            $('.nws-ac-title').not(this).next('.nws-ac-body').slideUp();
+            $('.nws-ac-item').not($(this).parent('.nws-ac-item')).removeClass('nws-active-ac-item');
+        });
+  //     $('.nws-ac-item:first-child .nws-ac-body').slideDown();
+  // $('.nws-ac-item:first-child').addClass('nws-active-ac-item');
+    });
+</script>
